@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Vendors — Vivah Verse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@400;500;600;700&family=Parisienne&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .listing-header { padding: var(--space-md) 0 var(--space-sm); }
+  .filter-bar { background: var(--white); border-radius: var(--radius-md); padding: 1.3rem; box-shadow: var(--shadow-soft); display: flex; gap: 1rem; flex-wrap: wrap; align-items: end; margin-bottom: var(--space-md); }
+  .filter-field { flex: 1; min-width: 160px; }
+  .filter-field label { font-size: 0.78rem; font-weight: 600; color: var(--wine); display:block; margin-bottom: 0.35rem; }
+  .filter-field input, .filter-field select { width: 100%; padding: 0.7rem 0.9rem; border-radius: var(--radius-sm); border: 1.5px solid rgba(90,30,58,0.15); font-family: inherit; }
+
+  .results-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; color: var(--ink-soft); font-size: 0.9rem; }
+
+  .vendor-card img { height: 190px; width: 100%; object-fit: cover; border-radius: var(--radius-md) var(--radius-md) 0 0; }
+  .vendor-card .body { padding: 1.3rem; }
+  .vendor-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 0.6rem; font-size: 0.9rem; color: var(--ink-soft); }
+
+  .empty-state { text-align: center; padding: var(--space-xl) var(--space-md); }
+  .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+
+  .skeleton { background: linear-gradient(90deg, #f0e3d6 25%, #f7ece0 37%, #f0e3d6 63%); background-size: 400% 100%; animation: skeleton-loading 1.4s ease infinite; border-radius: var(--radius-md); height: 320px; }
+  @keyframes skeleton-loading { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="wrap">
+    <a href="index.html" class="nav-logo"><span class="flower">🌸</span> Vivah Verse</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="listings.html" class="active">Find Vendors</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions" id="nav-auth-slot"></div>
+    <button class="nav-toggle">☰</button>
+  </div>
+</nav>
+
+<section class="listing-header">
+  <div class="wrap">
+    <span class="eyebrow">Verified & Locked Marketplace</span>
+    <h1 style="margin-top:0.8rem; font-size: clamp(2rem, 4vw, 2.8rem);">Find your perfect vendor</h1>
+    <p class="lede" style="margin-top:0.6rem;">Every listing here is verified, priced transparently, and shows real-time availability.</p>
+  </div>
+</section>
+
+<section class="section-sm" style="padding-top: 1.5rem;">
+  <div class="wrap">
+    <div class="filter-bar">
+      <div class="filter-field">
+        <label for="f-category">Category</label>
+        <select id="f-category"><option value="">All categories</option></select>
+      </div>
+      <div class="filter-field">
+        <label for="f-city">City</label>
+        <input id="f-city" type="text" placeholder="e.g. Mumbai">
+      </div>
+      <div class="filter-field" style="flex: 0 0 auto;">
+        <label for="f-verified">&nbsp;</label>
+        <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; padding: 0.7rem 0;">
+          <input type="checkbox" id="f-verified" style="width:auto;"> Verified only
+        </label>
+      </div>
+      <button class="btn btn-primary" id="apply-filters" style="height: 46px;">Search</button>
+    </div>
+
+    <div class="results-meta">
+      <span id="results-count">Loading vendors…</span>
+      <span>Sorted by: <strong>Highest rated</strong></span>
+    </div>
+
+    <div class="grid-3" id="vendor-results">
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">🌸 Vivah Verse</div>
+        <p style="opacity:0.75; font-size:0.9rem; max-width:32ch;">Stress-free weddings. One platform. One promise.</p>
+      </div>
+      <div><h4>Explore</h4><a href="listings.html">Find Vendors</a><a href="about.html">About Us</a><a href="contact.html">Contact</a></div>
+      <div><h4>For Vendors</h4><a href="signup.html?role=vendor">List Your Business</a><a href="login.html">Vendor Login</a></div>
+      <div><h4>Get in Touch</h4><a href="tel:8291945264">8291945264</a><a href="mailto:vivahverse9@gmail.com">vivahverse9@gmail.com</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Vivah Verse. All rights reserved.</span><span>Mumbai · Launching Mid 2026</span></div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script src="api.js"></script>
+<script>
+  const FALLBACK_VENDORS = [
+    { id: '', business_name: 'Royal Decor Co.', city: 'Mumbai', is_verified: true, rating_avg: 4.8, rating_count: 62, cover_image_url: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600&q=80', price_from: '₹75,000' },
+    { id: '', business_name: 'Frame & Story', city: 'Delhi', is_verified: true, rating_avg: 4.9, rating_count: 118, cover_image_url: 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=600&q=80', price_from: '₹1,20,000' },
+    { id: '', business_name: 'Saffron Table Catering', city: 'Bengaluru', is_verified: true, rating_avg: 4.6, rating_count: 47, cover_image_url: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600&q=80', price_from: '₹850/plate' },
+    { id: '', business_name: 'Glow Bridal Studio', city: 'Mumbai', is_verified: true, rating_avg: 4.7, rating_count: 89, cover_image_url: 'https://images.unsplash.com/photo-1560343090-f0409e92791a?w=600&q=80', price_from: '₹35,000' },
+    { id: '', business_name: 'Beats & Bass Entertainment', city: 'Pune', is_verified: false, rating_avg: 4.4, rating_count: 31, cover_image_url: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=600&q=80', price_from: '₹60,000' },
+    { id: '', business_name: 'The Garden Pavilion', city: 'Mumbai', is_verified: true, rating_avg: 4.9, rating_count: 204, cover_image_url: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80', price_from: '₹4,50,000' },
+  ];
+
+  function renderStars(avg) {
+    const rounded = Math.round(avg || 4);
+    return '★'.repeat(rounded) + '☆'.repeat(5 - rounded);
+  }
+
+  function renderVendors(vendors, usingFallback = false) {
+    const grid = document.getElementById('vendor-results');
+    const countEl = document.getElementById('results-count');
+    if (!vendors.length) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;"><div class="icon">🔍</div><h3>No vendors match yet</h3><p class="lede center" style="margin-top:0.5rem;">Try widening your search — or check back soon as we onboard more verified vendors.</p></div>`;
+      countEl.textContent = '0 vendors found';
+      return;
+    }
+    countEl.textContent = `${vendors.length} vendor${vendors.length !== 1 ? 's' : ''} found` + (usingFallback ? ' (preview data — connect the backend for live listings)' : '');
+    grid.innerHTML = vendors.map(v => `
+      <a href="vendor-detail.html?id=${v.id}" class="card vendor-card reveal visible">
+        <img src="${v.cover_image_url}" alt="${v.business_name}">
+        <div class="body">
+          <span class="tag ${v.is_verified ? 'verified' : ''}">${v.is_verified ? '✓ Verified' : 'New'}</span>
+          <h3 style="margin-top:0.6rem;">${v.business_name}</h3>
+          <p class="lede">${v.city || 'Location TBD'}</p>
+          <div class="vendor-meta">
+            <span class="stars">${renderStars(v.rating_avg)}</span>
+            <span>${v.price_from || (v.rating_count + ' reviews')}</span>
+          </div>
+        </div>
+      </a>`).join('');
+  }
+
+  async function loadCategories() {
+    const select = document.getElementById('f-category');
+    try {
+      const cats = await api.listCategories();
+      cats.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id; opt.textContent = c.name;
+        select.appendChild(opt);
+      });
+    } catch (e) { /* keep just "All categories" if backend unreachable */ }
+  }
+
+  async function loadVendors() {
+    const params = {};
+    const category_id = document.getElementById('f-category').value;
+    const city = document.getElementById('f-city').value.trim();
+    const verified_only = document.getElementById('f-verified').checked;
+    if (category_id) params.category_id = category_id;
+    if (city) params.city = city;
+    if (verified_only) params.verified_only = true;
+
+    try {
+      const vendors = await api.listVendors(params);
+      renderVendors(vendors);
+    } catch (e) {
+      // Backend not reachable — show preview data so the page never looks broken
+      let filtered = FALLBACK_VENDORS;
+      if (city) filtered = filtered.filter(v => v.city.toLowerCase().includes(city.toLowerCase()));
+      if (verified_only) filtered = filtered.filter(v => v.is_verified);
+      renderVendors(filtered, true);
+    }
+  }
+
+  // Pre-fill from URL (e.g. index.html links with ?category_id=)
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('category_id')) {
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('f-category').value = urlParams.get('category_id');
+    });
+  }
+
+  document.getElementById('apply-filters').addEventListener('click', loadVendors);
+  loadCategories();
+  loadVendors();
+</script>
+</body>
+</html>

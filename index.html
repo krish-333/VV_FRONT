@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivah Verse — Stress-free weddings. One platform. One promise.</title>
+<meta name="description" content="Vivah Verse is India's unified wedding marketplace — verified vendors, transparent pricing, EMI financing, and one accountable team from planning to the big day.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@400;500;600;700&family=Parisienne&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .hero { padding-top: var(--space-lg); overflow: visible; }
+  .hero-copy .badge-row { margin: 1.5rem 0 2rem; }
+  .hero-cta { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+  .hero-visual { position: relative; }
+  .hero-visual .arch-frame { aspect-ratio: 3/4; }
+  .hero-visual .floaty {
+    position: absolute; background: var(--white); border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lift); padding: 1rem 1.3rem; display: flex; align-items: center; gap: 0.7rem;
+  }
+  .floaty-1 { top: 8%; left: -8%; }
+  .floaty-2 { bottom: 10%; right: -6%; }
+  .floaty-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--blush); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+  .floaty small { color: var(--ink-soft); font-size: 0.75rem; display: block; }
+  .floaty strong { font-family: var(--font-display); color: var(--wine); font-size: 1rem; }
+
+  .stat-strip { background: var(--wine); color: var(--white); border-radius: var(--radius-lg); padding: var(--space-md); }
+  .stat-strip .grid-4 { text-align: center; }
+  .stat-strip .num { font-family: var(--font-display); font-size: 2.4rem; color: var(--gold-soft); }
+  .stat-strip .lbl { font-size: 0.85rem; opacity: 0.8; }
+
+  .problem-card { border-left: 3px solid var(--rose); padding-left: 1.2rem; }
+  .solution-card { background: var(--white); }
+
+  .cat-card { text-align: center; padding: 2rem 1rem; }
+  .cat-icon { font-size: 2.4rem; margin-bottom: 0.8rem; }
+
+  .step { display: flex; gap: 1.3rem; align-items: flex-start; }
+  .step-num { font-family: var(--font-display); font-size: 1.6rem; color: var(--rose); flex-shrink: 0; width: 44px; }
+
+  .vendor-card img { height: 200px; width: 100%; object-fit: cover; border-radius: var(--radius-md) var(--radius-md) 0 0; }
+  .vendor-card .body { padding: 1.3rem; }
+  .vendor-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 0.6rem; font-size: 0.9rem; color: var(--ink-soft); }
+
+  .cta-band { background: linear-gradient(135deg, var(--blush), var(--gold-soft)); border-radius: var(--radius-lg); padding: var(--space-lg) var(--space-md); text-align: center; position: relative; overflow: hidden; }
+
+  footer-note { font-family: var(--font-script); }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="wrap">
+    <a href="index.html" class="nav-logo"><span class="flower">🌸</span> Vivah Verse</a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="listings.html">Find Vendors</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions" id="nav-auth-slot"></div>
+    <button class="nav-toggle">☰</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero section">
+  <div class="wrap grid-2">
+    <div class="hero-copy reveal">
+      <span class="eyebrow">India's Unified Wedding Platform</span>
+      <h1 style="margin-top: 1rem;">Stress-free weddings.<br>One platform. <span class="script">One promise.</span></h1>
+      <p class="lede" style="margin-top: 1.2rem;">Every venue and vendor for your wedding — verified, transparently priced, and bookable in one place. No more 20 phone calls, no more guessing games.</p>
+      <div class="badge-row">
+        <span class="tag verified">✓ Verified Vendors</span>
+        <span class="tag gold">EMI up to 60% of cost</span>
+        <span class="tag">Real-time Availability</span>
+      </div>
+      <div class="hero-cta">
+        <a href="listings.html" class="btn btn-primary">Explore Vendors →</a>
+        <a href="signup.html?role=vendor" class="btn btn-outline">List Your Business</a>
+      </div>
+    </div>
+    <div class="hero-visual reveal">
+      <div class="arch-frame">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80" alt="Indian wedding couple walking under floral mandap">
+      </div>
+      <div class="floaty floaty-1">
+        <div class="floaty-icon">💍</div>
+        <div><strong>2,400+</strong><small>Weddings planned</small></div>
+      </div>
+      <div class="floaty floaty-2">
+        <div class="floaty-icon">🎊</div>
+        <div><strong>850+</strong><small>Verified vendors</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<section class="section-sm">
+  <div class="wrap">
+    <div class="stat-strip reveal">
+      <div class="grid-4">
+        <div><div class="num">₹130B</div><div class="lbl">Indian wedding industry</div></div>
+        <div><div class="num">30–40hrs</div><div class="lbl">Planning time saved</div></div>
+        <div><div class="num">60%</div><div class="lbl">Of cost covered via EMI</div></div>
+        <div><div class="num">300kg+</div><div class="lbl">Waste redirected per wedding</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="section">
+  <div class="wrap grid-2">
+    <div class="reveal">
+      <span class="eyebrow">The Old Way</span>
+      <h2 style="margin-top: 1rem;">Planning a wedding shouldn't feel like a second job.</h2>
+      <div class="divider"></div>
+      <p class="lede">Over 50 lakh weddings happen in India every year, yet couples are still stuck juggling 15–20 vendors by phone, spreadsheet, and guesswork.</p>
+    </div>
+    <div class="reveal" style="display:flex; flex-direction:column; gap:1.4rem;">
+      <div class="problem-card">
+        <h3>Chaotic coordination</h3>
+        <p class="lede">Endless calls, visits, and manual price comparisons across dozens of independent vendors.</p>
+      </div>
+      <div class="problem-card">
+        <h3>Trust deficit</h3>
+        <p class="lede">Vendors claim availability, then deny it later. Pricing shifts mid-negotiation.</p>
+      </div>
+      <div class="problem-card">
+        <h3>Financial stress</h3>
+        <p class="lede">Peak-season pricing and hidden charges push families toward high-interest loans.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="section" style="background: var(--cream-deep); border-radius: var(--radius-lg);">
+  <div class="wrap">
+    <div class="section-title center reveal">
+      <span class="eyebrow">The Vivah Verse Way</span>
+      <h2 style="margin-top: 1rem;">One verified, locked-in marketplace.</h2>
+      <p class="lede center" style="margin-top: 0.8rem;">Every vendor is verified and contracted upfront. Pricing, availability, and deliverables are locked before you ever say yes.</p>
+    </div>
+    <div class="grid-3" style="margin-top: var(--space-md);">
+      <div class="card card-pad solution-card reveal">
+        <h3>🔒 Verified & Locked</h3>
+        <p class="lede" style="margin-top:0.6rem;">Vendors onboarded through verification and contracts — pricing and availability locked upfront, no surprises.</p>
+      </div>
+      <div class="card card-pad solution-card reveal">
+        <h3>💳 EMI-Based Payments</h3>
+        <p class="lede" style="margin-top:0.6rem;">Industry-first wedding EMI through partner banks & NBFCs. Pay in predictable installments, covering up to 60% of cost.</p>
+      </div>
+      <div class="card card-pad solution-card reveal">
+        <h3>🌿 Built-in Sustainability</h3>
+        <p class="lede" style="margin-top:0.6rem;">Surplus food and floral waste routed to NGO partners as standard execution — not an afterthought.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-title reveal">
+      <span class="eyebrow">Every Wedding, Every Detail</span>
+      <h2 style="margin-top: 1rem;">Browse by category</h2>
+    </div>
+    <div class="grid-4" style="margin-top: var(--space-md);" id="category-grid">
+      <!-- Fallback static cards; replaced by JS if API is reachable -->
+      <div class="card cat-card reveal"><div class="cat-icon">🏛️</div><h3>Venues</h3></div>
+      <div class="card cat-card reveal"><div class="cat-icon">📸</div><h3>Photography</h3></div>
+      <div class="card cat-card reveal"><div class="cat-icon">🎊</div><h3>Decor</h3></div>
+      <div class="card cat-card reveal"><div class="cat-icon">🍽️</div><h3>Catering</h3></div>
+      <div class="card cat-card reveal"><div class="cat-icon">💄</div><h3>Makeup</h3></div>
+      <div class="card cat-card reveal"><div class="cat-icon">🎶</div><h3>Music & DJ</h3></div>
+      <div class="card cat-card reveal"><div class="cat-icon">🎨</div><h3>Mehendi</h3></div>
+      <div class="card cat-card reveal"><div class="cat-icon">👗</div><h3>Outfits</h3></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" style="background: var(--cream-deep); border-radius: var(--radius-lg);">
+  <div class="wrap grid-2">
+    <div class="reveal">
+      <span class="eyebrow">How It Works</span>
+      <h2 style="margin-top: 1rem;">From shortlist to "I do" in four steps.</h2>
+    </div>
+    <div class="reveal" style="display:flex; flex-direction:column; gap: 1.6rem;">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div><h3>Explore & shortlist</h3><p class="lede">Filter verified vendors by budget, city, and real-time availability.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div><h3>Check the calendar</h3><p class="lede">See exactly which dates each vendor has open before you commit.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div><h3>Book & pay your way</h3><p class="lede">Confirm instantly or send a request — pay upfront or via wedding EMI.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div><h3>We own execution</h3><p class="lede">Vivah Verse is the single accountable team on your wedding day.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED VENDORS -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-title reveal">
+      <span class="eyebrow">Handpicked For You</span>
+      <h2 style="margin-top: 1rem;">Featured vendors</h2>
+    </div>
+    <div class="grid-3" style="margin-top: var(--space-md);" id="featured-vendors">
+      <!-- Static fallback cards; JS replaces with live data when API is reachable -->
+      <div class="card vendor-card reveal">
+        <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600&q=80" alt="Wedding decor setup">
+        <div class="body">
+          <span class="tag verified">✓ Verified</span>
+          <h3 style="margin-top:0.6rem;">Royal Decor Co.</h3>
+          <p class="lede">Mumbai · Decor & Mandap</p>
+          <div class="vendor-meta"><span class="stars">★★★★★</span><span>From ₹75,000</span></div>
+        </div>
+      </div>
+      <div class="card vendor-card reveal">
+        <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=600&q=80" alt="Wedding photography">
+        <div class="body">
+          <span class="tag verified">✓ Verified</span>
+          <h3 style="margin-top:0.6rem;">Frame & Story</h3>
+          <p class="lede">Delhi · Photography & Film</p>
+          <div class="vendor-meta"><span class="stars">★★★★★</span><span>From ₹1,20,000</span></div>
+        </div>
+      </div>
+      <div class="card vendor-card reveal">
+        <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600&q=80" alt="Wedding catering spread">
+        <div class="body">
+          <span class="tag verified">✓ Verified</span>
+          <h3 style="margin-top:0.6rem;">Saffron Table Catering</h3>
+          <p class="lede">Bengaluru · Catering</p>
+          <div class="vendor-meta"><span class="stars">★★★★☆</span><span>From ₹850/plate</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="center" style="margin-top: var(--space-md);"><a href="listings.html" class="btn btn-outline">View all vendors →</a></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-sm">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <span class="eyebrow">Join Us</span>
+      <h2 style="margin-top: 1rem;">Join us in redefining the Indian wedding ecosystem.</h2>
+      <div class="hero-cta" style="justify-content:center;">
+        <a href="signup.html" class="btn btn-primary">Start Planning →</a>
+        <a href="signup.html?role=vendor" class="btn btn-outline" style="background:var(--white);">Become a Vendor</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">🌸 Vivah Verse</div>
+        <p style="opacity:0.75; font-size:0.9rem; max-width:32ch;">Stress-free weddings. One platform. One promise.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="listings.html">Find Vendors</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div>
+        <h4>For Vendors</h4>
+        <a href="signup.html?role=vendor">List Your Business</a>
+        <a href="login.html">Vendor Login</a>
+      </div>
+      <div>
+        <h4>Get in Touch</h4>
+        <a href="tel:8291945264">8291945264</a>
+        <a href="mailto:vivahverse9@gmail.com">vivahverse9@gmail.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Vivah Verse. All rights reserved.</span>
+      <span>Mumbai · Launching Mid 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script src="api.js"></script>
+<script>
+  // Attempt to load live categories/vendors; silently keep static fallback if API isn't reachable yet
+  (async () => {
+    try {
+      const cats = await api.listCategories();
+      if (cats && cats.length) {
+        const icons = { Venue: '🏛️', Photography: '📸', Decor: '🎊', Catering: '🍽️', Makeup: '💄', 'Music & DJ': '🎶', Mehendi: '🎨', Outfits: '👗' };
+        document.getElementById('category-grid').innerHTML = cats.map(c => `
+          <a href="listings.html?category_id=${c.id}" class="card cat-card reveal visible">
+            <div class="cat-icon">${c.icon || icons[c.name] || '✨'}</div><h3>${c.name}</h3>
+          </a>`).join('');
+      }
+    } catch (e) { /* backend not reachable yet — static fallback stays */ }
+
+    try {
+      const vendors = await api.listVendors({ verified_only: true });
+      if (vendors && vendors.length) {
+        document.getElementById('featured-vendors').innerHTML = vendors.slice(0, 3).map(v => `
+          <a href="vendor-detail.html?id=${v.id}" class="card vendor-card reveal visible">
+            <img src="${v.cover_image_url || 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600&q=80'}" alt="${v.business_name}">
+            <div class="body">
+              <span class="tag ${v.is_verified ? 'verified' : ''}">${v.is_verified ? '✓ Verified' : 'New'}</span>
+              <h3 style="margin-top:0.6rem;">${v.business_name}</h3>
+              <p class="lede">${v.city || ''}</p>
+              <div class="vendor-meta"><span class="stars">${'★'.repeat(Math.round(v.rating_avg || 4))}${'☆'.repeat(5 - Math.round(v.rating_avg || 4))}</span><span>${v.rating_count} reviews</span></div>
+            </div>
+          </a>`).join('');
+      }
+    } catch (e) { /* backend not reachable yet — static fallback stays */ }
+  })();
+</script>
+</body>
+</html>

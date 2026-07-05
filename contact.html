@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Vivah Verse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@400;500;600;700&family=Parisienne&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<style>
+  .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); align-items: start; }
+  @media (max-width: 860px) { .contact-layout { grid-template-columns: 1fr; } }
+  .contact-detail { display: flex; align-items: center; gap: 0.9rem; padding: 1rem 0; border-bottom: 1px solid rgba(90,30,58,0.08); }
+  .contact-detail .icon { width: 44px; height: 44px; border-radius: 50%; background: var(--blush); display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="wrap">
+    <a href="index.html" class="nav-logo"><span class="flower">🌸</span> Vivah Verse</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="listings.html">Find Vendors</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+    <div class="nav-actions" id="nav-auth-slot"></div>
+    <button class="nav-toggle">☰</button>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-title center" style="margin: 0 auto var(--space-md);">
+      <span class="eyebrow center">Get In Touch</span>
+      <h1 style="margin-top:1rem;">We'd love to hear from you.</h1>
+      <p class="lede center" style="margin-top:0.8rem;">Questions about booking, becoming a vendor, or just want to say hi — reach out any way that's easiest.</p>
+    </div>
+
+    <div class="contact-layout">
+      <div class="form-card reveal visible">
+        <div class="form-banner" id="contact-banner"></div>
+        <form id="contact-form">
+          <div class="field">
+            <label for="c-name">Your name</label>
+            <input type="text" id="c-name" required>
+          </div>
+          <div class="field">
+            <label for="c-email">Email</label>
+            <input type="email" id="c-email" required>
+          </div>
+          <div class="field">
+            <label for="c-message">Message</label>
+            <textarea id="c-message" required placeholder="How can we help?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Send message</button>
+        </form>
+      </div>
+
+      <div class="reveal visible">
+        <div class="contact-detail">
+          <div class="icon">📞</div>
+          <div><strong>Call us</strong><br><a href="tel:8291945264" class="lede">8291945264</a></div>
+        </div>
+        <div class="contact-detail">
+          <div class="icon">✉️</div>
+          <div><strong>Email us</strong><br><a href="mailto:vivahverse9@gmail.com" class="lede">vivahverse9@gmail.com</a></div>
+        </div>
+        <div class="contact-detail">
+          <div class="icon">📍</div>
+          <div><strong>Based in</strong><br><span class="lede">Mumbai · Launching Mid 2026</span></div>
+        </div>
+        <div class="contact-detail" style="border-bottom:none;">
+          <div class="icon">🏪</div>
+          <div><strong>Are you a vendor?</strong><br><a href="signup.html?role=vendor" class="lede" style="color:var(--wine); font-weight:600;">List your business →</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">🌸 Vivah Verse</div>
+        <p style="opacity:0.75; font-size:0.9rem; max-width:32ch;">Stress-free weddings. One platform. One promise.</p>
+      </div>
+      <div><h4>Explore</h4><a href="listings.html">Find Vendors</a><a href="about.html">About Us</a><a href="contact.html">Contact</a></div>
+      <div><h4>For Vendors</h4><a href="signup.html?role=vendor">List Your Business</a><a href="login.html">Vendor Login</a></div>
+      <div><h4>Get in Touch</h4><a href="tel:8291945264">8291945264</a><a href="mailto:vivahverse9@gmail.com">vivahverse9@gmail.com</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Vivah Verse. All rights reserved.</span><span>Mumbai · Launching Mid 2026</span></div>
+  </div>
+</footer>
+
+<script src="../shared/main.js"></script>
+<script>
+  // No backend endpoint for contact messages yet — routes to email as a working fallback.
+  document.getElementById('contact-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('c-name').value.trim();
+    const email = document.getElementById('c-email').value.trim();
+    const message = document.getElementById('c-message').value.trim();
+    const subject = encodeURIComponent(`Message from ${name} via Vivah Verse site`);
+    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:vivahverse9@gmail.com?subject=${subject}&body=${body}`;
+    showBanner('contact-banner', 'Opening your email app to send this — thanks for reaching out!', 'success');
+  });
+</script>
+</body>
+</html>

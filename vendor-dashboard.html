@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendor Dashboard — Vivah Verse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@400;500;600;700&family=Parisienne&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<style>
+  .dash-head { padding: var(--space-md) 0 var(--space-sm); }
+  .tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: var(--space-md); border-bottom: 1px solid rgba(90,30,58,0.1); }
+  .tab-btn { padding: 0.9rem 1.4rem; font-weight: 600; color: var(--ink-soft); border-bottom: 2px solid transparent; }
+  .tab-btn.active { color: var(--wine); border-bottom-color: var(--wine); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .service-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-radius: var(--radius-sm); background: var(--cream-deep); margin-bottom: 0.7rem; flex-wrap: wrap; gap: 0.7rem; }
+
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; margin-top: 0.8rem; }
+  .cal-day { aspect-ratio: 1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; background: var(--cream-deep); color: var(--ink-soft); cursor: pointer; user-select: none; border: 2px solid transparent; }
+  .cal-day.available { background: #E4F0E4; color: var(--success); font-weight: 600; }
+  .cal-day.blocked { background: #FBE7E5; color: var(--error); }
+  .cal-day.booked { background: var(--gold-soft); color: var(--wine-deep); cursor: not-allowed; }
+  .cal-day.selected { border-color: var(--wine); }
+  .cal-legend { display: flex; gap: 1rem; font-size: 0.8rem; margin: 0.8rem 0; color: var(--ink-soft); flex-wrap: wrap; }
+  .cal-legend span { display: flex; align-items: center; gap: 0.4rem; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  .booking-row { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem; gap: 1rem; flex-wrap: wrap; border-radius: var(--radius-sm); background: var(--white); box-shadow: var(--shadow-soft); margin-bottom: 0.8rem; }
+  .status-pill { font-size: 0.75rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: 100px; text-transform: capitalize; }
+  .status-pending { background: var(--gold-soft); color: var(--wine-deep); }
+  .status-confirmed { background: #E4F0E4; color: var(--success); }
+  .status-completed { background: var(--blush); color: var(--wine); }
+  .status-declined, .status-cancelled { background: #FBE7E5; color: var(--error); }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="wrap">
+    <a href="index.html" class="nav-logo"><span class="flower">🌸</span> Vivah Verse</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="listings.html">Find Vendors</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions" id="nav-auth-slot"></div>
+    <button class="nav-toggle">☰</button>
+  </div>
+</nav>
+
+<section class="dash-head">
+  <div class="wrap">
+    <span class="eyebrow">Vendor Portal</span>
+    <h1 style="margin-top:0.8rem; font-size: clamp(1.9rem, 3.5vw, 2.6rem);" id="welcome-heading">Vendor Dashboard</h1>
+    <p class="lede" style="margin-top:0.5rem;">Manage your listing, services, calendar, and bookings.</p>
+  </div>
+</section>
+
+<section class="section-sm" style="padding-top:1rem;">
+  <div class="wrap">
+    <div class="tabs" id="tabs">
+      <button class="tab-btn active" data-tab="profile">Profile</button>
+      <button class="tab-btn" data-tab="services">Services</button>
+      <button class="tab-btn" data-tab="availability">Availability</button>
+      <button class="tab-btn" data-tab="bookings">Bookings</button>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="tab-panel active" id="panel-profile">
+      <div class="card card-pad" style="max-width: 640px;">
+        <h3 id="profile-heading">Business profile</h3>
+        <p class="lede" style="margin:0.5rem 0 1.2rem;" id="profile-sub">Set this up first — customers won't see you in listings until it's complete.</p>
+        <div class="form-banner" id="profile-banner"></div>
+        <form id="profile-form">
+          <div class="field">
+            <label for="p-business-name">Business name</label>
+            <input type="text" id="p-business-name" required>
+          </div>
+          <div class="field">
+            <label for="p-description">Description</label>
+            <textarea id="p-description" placeholder="Tell couples what makes your business special"></textarea>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="p-city">City</label>
+              <input type="text" id="p-city">
+            </div>
+            <div class="field">
+              <label for="p-state">State</label>
+              <input type="text" id="p-state">
+            </div>
+          </div>
+          <div class="field">
+            <label for="p-address">Address</label>
+            <textarea id="p-address"></textarea>
+          </div>
+          <div class="field">
+            <label for="p-cover">Cover image URL</label>
+            <input type="url" id="p-cover" placeholder="https://…">
+          </div>
+          <div class="field">
+            <label for="p-logo">Logo URL</label>
+            <input type="url" id="p-logo" placeholder="https://…">
+          </div>
+          <div class="field" style="display:flex; align-items:center; gap:0.6rem;">
+            <input type="checkbox" id="p-instant" style="width:auto;">
+            <label for="p-instant" style="margin:0;">Enable instant book (bookings auto-confirm)</label>
+          </div>
+          <button type="submit" class="btn btn-primary" id="profile-submit-btn">Save profile</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="tab-panel" id="panel-services">
+      <div class="card card-pad" style="margin-bottom: var(--space-md); max-width: 640px;">
+        <h3>Add a service</h3>
+        <div class="form-banner" id="service-banner"></div>
+        <form id="service-form" style="margin-top:0.8rem;">
+          <div class="field">
+            <label for="s-category">Category</label>
+            <select id="s-category" required></select>
+          </div>
+          <div class="field">
+            <label for="s-name">Service name</label>
+            <input type="text" id="s-name" required placeholder="e.g. Full-day bridal makeup">
+          </div>
+          <div class="field">
+            <label for="s-description">Description</label>
+            <textarea id="s-description"></textarea>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="s-price">Price (₹)</label>
+              <input type="number" id="s-price" min="0" required>
+            </div>
+            <div class="field">
+              <label for="s-unit">Price unit</label>
+              <input type="text" id="s-unit" value="per event">
+            </div>
+          </div>
+          <div class="field">
+            <label for="s-image">Image URL (optional)</label>
+            <input type="url" id="s-image" placeholder="https://…">
+          </div>
+          <button type="submit" class="btn btn-primary">Add service</button>
+        </form>
+      </div>
+      <div class="card card-pad">
+        <h3>Your services</h3>
+        <div id="services-list" style="margin-top:1rem;">
+          <p class="empty-note">Loading…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- AVAILABILITY -->
+    <div class="tab-panel" id="panel-availability">
+      <div class="card card-pad">
+        <h3>Next 60 days</h3>
+        <p class="lede" style="margin-top:0.5rem;">Click a date to cycle it through Available → Blocked → Not set. Booked dates are locked — cancel the booking to free them.</p>
+        <div class="cal-legend">
+          <span><span class="dot" style="background:#5C8A5C;"></span> Available</span>
+          <span><span class="dot" style="background:#B5514A;"></span> Blocked</span>
+          <span><span class="dot" style="background:var(--gold);"></span> Booked</span>
+        </div>
+        <div class="cal-grid" id="avail-grid"></div>
+        <button class="btn btn-primary" id="save-availability-btn" style="margin-top:1.2rem;">Save changes</button>
+        <span id="avail-save-note" style="margin-left:1rem; font-size:0.85rem; color: var(--success);"></span>
+      </div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div class="tab-panel" id="panel-bookings">
+      <div id="vendor-bookings-list">
+        <p class="empty-note">Loading…</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">🌸 Vivah Verse</div>
+        <p style="opacity:0.75; font-size:0.9rem; max-width:32ch;">Stress-free weddings. One platform. One promise.</p>
+      </div>
+      <div><h4>Explore</h4><a href="listings.html">Find Vendors</a><a href="about.html">About Us</a><a href="contact.html">Contact</a></div>
+      <div><h4>For Vendors</h4><a href="signup.html?role=vendor">List Your Business</a><a href="login.html">Vendor Login</a></div>
+      <div><h4>Get in Touch</h4><a href="tel:8291945264">8291945264</a><a href="mailto:vivahverse9@gmail.com">vivahverse9@gmail.com</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Vivah Verse. All rights reserved.</span><span>Mumbai · Launching Mid 2026</span></div>
+  </div>
+</footer>
+
+<script src="../shared/main.js"></script>
+<script src="../shared/api.js"></script>
+<script>
+  const user = requireAuth(['vendor']);
+  if (user) document.getElementById('welcome-heading').textContent = `Welcome, ${user.full_name.split(' ')[0]}`;
+
+  let myProfile = null;
+
+  // ---- Tabs ----
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ---- Profile ----
+  async function loadProfile() {
+    try {
+      myProfile = await api.getMyVendorProfile();
+      document.getElementById('profile-heading').textContent = 'Edit business profile';
+      document.getElementById('profile-sub').textContent = myProfile.is_verified
+        ? '✓ Your listing is verified and live.'
+        : 'Your listing is pending verification by our team.';
+      document.getElementById('p-business-name').value = myProfile.business_name || '';
+      document.getElementById('p-description').value = myProfile.description || '';
+      document.getElementById('p-city').value = myProfile.city || '';
+      document.getElementById('p-state').value = myProfile.state || '';
+      document.getElementById('p-cover').value = myProfile.cover_image_url || '';
+      document.getElementById('p-logo').value = myProfile.logo_url || '';
+      document.getElementById('p-instant').checked = !!myProfile.is_instant_book;
+    } catch (e) {
+      // No profile yet — form stays blank for creation.
+      myProfile = null;
+    }
+  }
+
+  document.getElementById('profile-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+      business_name: document.getElementById('p-business-name').value.trim(),
+      description: document.getElementById('p-description').value.trim() || null,
+      city: document.getElementById('p-city').value.trim() || null,
+      state: document.getElementById('p-state').value.trim() || null,
+      address: document.getElementById('p-address').value.trim() || null,
+    };
+    const btn = document.getElementById('profile-submit-btn');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    try {
+      if (myProfile) {
+        payload.cover_image_url = document.getElementById('p-cover').value.trim() || null;
+        payload.logo_url = document.getElementById('p-logo').value.trim() || null;
+        payload.is_instant_book = document.getElementById('p-instant').checked;
+        myProfile = await api.updateMyVendorProfile(payload);
+        showBanner('profile-banner', 'Profile updated.', 'success');
+      } else {
+        myProfile = await api.createVendorProfile(payload);
+        showBanner('profile-banner', 'Profile created! You can now add services.', 'success');
+        await loadProfile();
+        loadCategories();
+      }
+    } catch (err) {
+      showBanner('profile-banner', err.message || 'Could not save profile.');
+    } finally {
+      btn.disabled = false; btn.textContent = 'Save profile';
+    }
+  });
+
+  // ---- Services ----
+  async function loadCategories() {
+    const select = document.getElementById('s-category');
+    try {
+      const cats = await api.listCategories();
+      select.innerHTML = cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+    } catch (e) { /* leave empty */ }
+  }
+
+  async function loadServices() {
+    const list = document.getElementById('services-list');
+    if (!myProfile) { list.innerHTML = '<p class="empty-note">Create your business profile first.</p>'; return; }
+    try {
+      const services = await api.getVendorServices(myProfile.id);
+      if (!services.length) { list.innerHTML = '<p class="empty-note">No services added yet.</p>'; return; }
+      list.innerHTML = services.map(s => `
+        <div class="service-item">
+          <div>
+            <strong>${s.name}</strong>
+            <div style="font-size:0.85rem; color:var(--ink-soft);">${formatINR(s.price)} · ${s.price_unit}</div>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="removeService('${s.id}')">Remove</button>
+        </div>`).join('');
+    } catch (e) {
+      list.innerHTML = '<p class="empty-note">Couldn\'t load services.</p>';
+    }
+  }
+
+  async function removeService(id) {
+    try {
+      await fetch(`${API_BASE_URL}/vendors/services/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${getToken()}` } });
+      loadServices();
+    } catch (e) { /* ignore */ }
+  }
+
+  document.getElementById('service-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!myProfile) { showBanner('service-banner', 'Create your business profile first.'); return; }
+    const payload = {
+      category_id: document.getElementById('s-category').value,
+      name: document.getElementById('s-name').value.trim(),
+      description: document.getElementById('s-description').value.trim() || null,
+      price: Number(document.getElementById('s-price').value),
+      price_unit: document.getElementById('s-unit').value.trim() || 'per event',
+      image_url: document.getElementById('s-image').value.trim() || null,
+    };
+    try {
+      await api.createService(payload);
+      document.getElementById('service-form').reset();
+      document.getElementById('s-unit').value = 'per event';
+      showBanner('service-banner', 'Service added.', 'success');
+      loadServices();
+    } catch (err) {
+      showBanner('service-banner', err.message || 'Could not add service.');
+    }
+  });
+
+  // ---- Availability ----
+  const availChanges = {};
+  const STATUS_CYCLE = { '': 'available', 'available': 'blocked', 'blocked': '' };
+
+  async function loadAvailability() {
+    const grid = document.getElementById('avail-grid');
+    if (!myProfile) { grid.innerHTML = '<p class="empty-note">Create your business profile first.</p>'; return; }
+    const today = new Date();
+    const start = today.toISOString().split('T')[0];
+    const endDate = new Date(today); endDate.setDate(endDate.getDate() + 59);
+    const end = endDate.toISOString().split('T')[0];
+
+    let entries = [];
+    try { entries = await api.getMyAvailability(start, end); } catch (e) { /* start blank */ }
+    const byDate = {};
+    entries.forEach(e => { byDate[e.date] = e.status; });
+
+    let html = '';
+    for (let i = 0; i < 60; i++) {
+      const d = new Date(today); d.setDate(d.getDate() + i);
+      const iso = d.toISOString().split('T')[0];
+      const status = byDate[iso] || '';
+      html += `<div class="cal-day ${status}" data-date="${iso}" data-status="${status}">${d.getDate()}</div>`;
+    }
+    grid.innerHTML = html;
+
+    grid.querySelectorAll('.cal-day').forEach(cell => {
+      cell.addEventListener('click', () => {
+        if (cell.dataset.status === 'booked') return; // locked
+        const next = STATUS_CYCLE[cell.dataset.status] ?? '';
+        cell.dataset.status = next;
+        cell.className = `cal-day ${next} selected`;
+        availChanges[cell.dataset.date] = next || 'available'; // unset defaults back to available on backend
+        if (!next) availChanges[cell.dataset.date] = 'available';
+      });
+    });
+  }
+
+  document.getElementById('save-availability-btn').addEventListener('click', async () => {
+    const entries = Object.entries(availChanges).map(([date, status]) => ({ date, status }));
+    if (!entries.length) { document.getElementById('avail-save-note').textContent = 'No changes to save.'; return; }
+    try {
+      await api.setMyAvailability(entries);
+      document.getElementById('avail-save-note').textContent = 'Saved!';
+      for (const k in availChanges) delete availChanges[k];
+    } catch (err) {
+      document.getElementById('avail-save-note').style.color = 'var(--error)';
+      document.getElementById('avail-save-note').textContent = err.message || 'Could not save.';
+    }
+  });
+
+  // ---- Bookings ----
+  async function loadVendorBookings() {
+    const list = document.getElementById('vendor-bookings-list');
+    try {
+      const bookings = await api.getMyBookings();
+      if (!bookings.length) { list.innerHTML = '<p class="empty-note">No booking requests yet.</p>'; return; }
+      list.innerHTML = bookings.map(b => `
+        <div class="booking-row">
+          <div>
+            <strong>${formatDate(b.event_date)}</strong> <span class="status-pill status-${b.status}">${b.status}</span>
+            <div style="font-size:0.85rem; color:var(--ink-soft); margin-top:0.3rem;">${formatINR(b.total_amount)}${b.guest_count ? ' · ' + b.guest_count + ' guests' : ''}${b.notes ? ' · "' + b.notes + '"' : ''}</div>
+          </div>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            ${b.status === 'pending' ? `
+              <button class="btn btn-primary btn-sm" onclick="updateStatus('${b.id}','confirmed')">Confirm</button>
+              <button class="btn btn-outline btn-sm" onclick="updateStatus('${b.id}','declined')">Decline</button>` : ''}
+            ${b.status === 'confirmed' ? `<button class="btn btn-primary btn-sm" onclick="updateStatus('${b.id}','completed')">Mark completed</button>` : ''}
+          </div>
+        </div>`).join('');
+    } catch (e) {
+      list.innerHTML = '<p class="empty-note">Couldn\'t load bookings.</p>';
+    }
+  }
+
+  async function updateStatus(id, status) {
+    try {
+      await api.updateBookingStatus(id, status);
+      loadVendorBookings();
+      loadAvailability();
+    } catch (e) { alert(e.message || 'Could not update booking.'); }
+  }
+
+  (async () => {
+    await loadProfile();
+    await loadCategories();
+    await loadServices();
+    await loadAvailability();
+    await loadVendorBookings();
+  })();
+</script>
+</body>
+</html>

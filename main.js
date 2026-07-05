@@ -61,13 +61,42 @@ function clearSession() {
   localStorage.removeItem('vv_user');
 }
 
+// Where each role lands after login/signup.
+function dashboardUrlForRole(role) {
+  if (role === 'admin') return 'admin-dashboard.html';
+  if (role === 'vendor') return 'vendor-dashboard.html';
+  return 'account.html';
+}
+
+/**
+ * Call at the top of any page that requires a logged-in user.
+ * allowedRoles: array of role strings, or omit/empty to allow any logged-in user.
+ * Redirects to login.html (with a returnTo) if not authenticated,
+ * or to the correct dashboard if authenticated with the wrong role.
+ * Returns the user object if the check passes (for convenience).
+ */
+function requireAuth(allowedRoles = []) {
+  const user = getUser();
+  const token = getToken();
+  if (!user || !token) {
+    const here = window.location.pathname.split('/').pop();
+    window.location.href = `login.html?returnTo=${encodeURIComponent(here)}`;
+    return null;
+  }
+  if (allowedRoles.length && !allowedRoles.includes(user.role)) {
+    window.location.href = dashboardUrlForRole(user.role);
+    return null;
+  }
+  return user;
+}
+
 function updateAuthNav() {
   const slot = document.getElementById('nav-auth-slot');
   if (!slot) return;
   const user = getUser();
   if (user) {
     slot.innerHTML = `
-      <a href="account.html" class="btn btn-outline btn-sm">Hi, ${user.full_name.split(' ')[0]}</a>
+      <a href="${dashboardUrlForRole(user.role)}" class="btn btn-outline btn-sm">Hi, ${user.full_name.split(' ')[0]}</a>
       <button class="btn btn-primary btn-sm" onclick="handleLogout()">Log out</button>
     `;
   } else {
@@ -97,4 +126,21 @@ function showBanner(bannerId, message, type = 'error') {
   if (!el) return;
   el.textContent = message;
   el.className = `form-banner show ${type}`;
+}
+
+// ---- Small formatting helpers reused across dashboards ----
+function formatINR(n) {
+  if (n === null || n === undefined) return '—';
+  return '₹' + Number(n).toLocaleString('en-IN');
+}
+function formatDate(d) {
+  if (!d) return '—';
+  return new Date(d + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+function statusTagClass(status) {
+  const map = {
+    confirmed: 'verified', completed: 'verified',
+    pending: '', declined: '', cancelled: ''
+  };
+  return map[status] !== undefined ? map[status] : '';
 }

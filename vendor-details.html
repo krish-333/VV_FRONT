@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendor — Vivah Verse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@400;500;600;700&family=Parisienne&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<style>
+  .vendor-hero { padding: var(--space-md) 0; }
+  .vendor-cover { border-radius: var(--radius-lg); overflow: hidden; height: 320px; box-shadow: var(--shadow-lift); position: relative; }
+  .vendor-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .vendor-title-row { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-top: var(--space-md); }
+  .vendor-title-row h1 { font-size: clamp(1.8rem, 3vw, 2.4rem); }
+  .vendor-sub { color: var(--ink-soft); margin-top: 0.4rem; }
+
+  .layout { display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-lg); align-items: start; }
+  @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } }
+
+  .booking-card { position: sticky; top: 100px; }
+
+  .service-row { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(90,30,58,0.08); gap: 1rem; }
+  .service-row:last-child { border-bottom: none; }
+  .service-row input[type="radio"] { width: auto; margin-right: 0.7rem; }
+  .service-name-wrap { display: flex; align-items: center; }
+
+  .review-item { padding: 1.2rem 0; border-bottom: 1px solid rgba(90,30,58,0.08); }
+  .review-item:last-child { border-bottom: none; }
+  .review-head { display: flex; justify-content: space-between; align-items: center; }
+
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.35rem; margin-top: 0.8rem; }
+  .cal-day { aspect-ratio: 1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; background: var(--cream-deep); color: var(--ink-soft); }
+  .cal-day.available { background: #E4F0E4; color: var(--success); font-weight: 600; }
+  .cal-day.blocked, .cal-day.booked { background: #FBE7E5; color: var(--error); }
+  .cal-legend { display: flex; gap: 1rem; font-size: 0.8rem; margin-top: 0.8rem; color: var(--ink-soft); flex-wrap: wrap; }
+  .cal-legend span { display: flex; align-items: center; gap: 0.4rem; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(58,42,46,0.5); display: none; align-items: center; justify-content: center; z-index: 200; padding: 1rem; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: var(--white); border-radius: var(--radius-lg); padding: clamp(1.5rem, 4vw, 2.5rem); max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lift); }
+  .modal-close { float: right; font-size: 1.4rem; color: var(--ink-soft); cursor: pointer; }
+
+  .empty-note { color: var(--ink-soft); font-size: 0.9rem; padding: 1rem 0; }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="wrap">
+    <a href="index.html" class="nav-logo"><span class="flower">🌸</span> Vivah Verse</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="listings.html" class="active">Find Vendors</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions" id="nav-auth-slot"></div>
+    <button class="nav-toggle">☰</button>
+  </div>
+</nav>
+
+<section class="vendor-hero">
+  <div class="wrap">
+    <div class="vendor-cover" id="vendor-cover">
+      <div class="skeleton" style="height:100%; border-radius: var(--radius-lg);"></div>
+    </div>
+    <div class="vendor-title-row" id="vendor-title-row">
+      <div>
+        <h1 id="vendor-name">Loading…</h1>
+        <p class="vendor-sub" id="vendor-meta-line"></p>
+      </div>
+      <div class="badge-row" id="vendor-badges"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="wrap layout">
+    <div>
+      <div id="vendor-about" class="reveal visible" style="margin-bottom: var(--space-md);">
+        <h3>About</h3>
+        <p class="lede" id="vendor-description" style="max-width: none; margin-top:0.6rem;">—</p>
+      </div>
+
+      <div class="card card-pad reveal visible" style="margin-bottom: var(--space-md);">
+        <h3>Services & pricing</h3>
+        <div id="service-list" style="margin-top:0.6rem;">
+          <p class="empty-note">Loading services…</p>
+        </div>
+      </div>
+
+      <div class="card card-pad reveal visible" style="margin-bottom: var(--space-md);">
+        <h3>Availability — next 60 days</h3>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="cal-legend">
+          <span><span class="dot" style="background:#5C8A5C;"></span> Available</span>
+          <span><span class="dot" style="background:#B5514A;"></span> Blocked / booked</span>
+          <span><span class="dot" style="background:var(--cream-deep);"></span> Not yet set</span>
+        </div>
+      </div>
+
+      <div class="card card-pad reveal visible">
+        <h3>Reviews</h3>
+        <div id="review-list" style="margin-top:0.6rem;">
+          <p class="empty-note">Loading reviews…</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-card">
+      <div class="card card-pad">
+        <span class="eyebrow">Request to book</span>
+        <p class="lede" style="margin-top:0.6rem;">Pick a service and date — we'll confirm availability instantly.</p>
+        <button class="btn btn-primary btn-block" style="margin-top:1.2rem;" id="open-booking-btn">Check availability & book</button>
+        <div id="booking-status-note" style="margin-top:1rem; font-size:0.85rem; color: var(--ink-soft);"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">🌸 Vivah Verse</div>
+        <p style="opacity:0.75; font-size:0.9rem; max-width:32ch;">Stress-free weddings. One platform. One promise.</p>
+      </div>
+      <div><h4>Explore</h4><a href="listings.html">Find Vendors</a><a href="about.html">About Us</a><a href="contact.html">Contact</a></div>
+      <div><h4>For Vendors</h4><a href="signup.html?role=vendor">List Your Business</a><a href="login.html">Vendor Login</a></div>
+      <div><h4>Get in Touch</h4><a href="tel:8291945264">8291945264</a><a href="mailto:vivahverse9@gmail.com">vivahverse9@gmail.com</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Vivah Verse. All rights reserved.</span><span>Mumbai · Launching Mid 2026</span></div>
+  </div>
+</footer>
+
+<!-- Booking modal -->
+<div class="modal-overlay" id="booking-modal">
+  <div class="modal-box">
+    <span class="modal-close" id="modal-close">✕</span>
+    <h3>Request a booking</h3>
+    <div class="form-banner" id="booking-banner"></div>
+    <form id="booking-form">
+      <div class="field">
+        <label for="b-service">Service</label>
+        <select id="b-service" required></select>
+      </div>
+      <div class="field">
+        <label for="b-date">Event date</label>
+        <input type="date" id="b-date" required>
+        <div class="form-error" id="b-date-error"></div>
+      </div>
+      <div class="field">
+        <label for="b-guests">Guest count (optional)</label>
+        <input type="number" id="b-guests" min="1" placeholder="e.g. 250">
+      </div>
+      <div class="field">
+        <label for="b-notes">Notes for the vendor (optional)</label>
+        <textarea id="b-notes" placeholder="Anything they should know upfront"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="booking-submit-btn">Send booking request</button>
+    </form>
+  </div>
+</div>
+
+<!-- Post-booking confirmation with "pay to confirm" (payments coming soon) -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <span class="modal-close" id="confirm-close">✕</span>
+    <h3 id="confirm-title">Request sent!</h3>
+    <p class="lede" id="confirm-body" style="margin-top:0.8rem;"></p>
+    <div class="form-banner" id="pay-banner"></div>
+    <button class="btn btn-gold btn-block" id="pay-btn" style="margin-top:1.2rem;"></button>
+    <a href="account.html" class="btn btn-outline btn-block" style="margin-top:0.8rem;">View my bookings</a>
+  </div>
+</div>
+
+<script src="../shared/main.js"></script>
+<script src="../shared/api.js"></script>
+<script>
+  const vendorId = new URLSearchParams(window.location.search).get('id');
+  let vendor = null;
+  let services = [];
+  let selectedService = null;
+
+  if (!vendorId) {
+    document.getElementById('vendor-name').textContent = 'Vendor not found';
+  }
+
+  function renderStars(avg) {
+    const rounded = Math.round(avg || 0);
+    return '★'.repeat(rounded) + '☆'.repeat(5 - rounded);
+  }
+
+  async function loadVendor() {
+    try {
+      vendor = await api.getVendor(vendorId);
+      document.getElementById('vendor-cover').innerHTML = `<img src="${vendor.cover_image_url || 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=80'}" alt="${vendor.business_name}">`;
+      document.getElementById('vendor-name').textContent = vendor.business_name;
+      document.getElementById('vendor-meta-line').innerHTML = `<span class="stars">${renderStars(vendor.rating_avg)}</span> &nbsp;${vendor.rating_avg?.toFixed(1) || '—'} (${vendor.rating_count} reviews) · ${vendor.city || 'Location TBD'}`;
+      document.getElementById('vendor-badges').innerHTML = `
+        <span class="tag ${vendor.is_verified ? 'verified' : ''}">${vendor.is_verified ? '✓ Verified' : 'New vendor'}</span>
+        ${vendor.is_instant_book ? '<span class="tag gold">⚡ Instant book</span>' : ''}
+      `;
+      document.getElementById('vendor-description').textContent = vendor.description || 'This vendor hasn\'t added a description yet.';
+      document.title = `${vendor.business_name} — Vivah Verse`;
+    } catch (e) {
+      document.getElementById('vendor-name').textContent = 'Vendor not found';
+      document.getElementById('vendor-description').textContent = 'This listing may have been removed or the link is incorrect.';
+    }
+  }
+
+  async function loadServices() {
+    const list = document.getElementById('service-list');
+    const select = document.getElementById('b-service');
+    try {
+      services = await api.getVendorServices(vendorId);
+      if (!services.length) {
+        list.innerHTML = '<p class="empty-note">No services listed yet.</p>';
+        return;
+      }
+      list.innerHTML = services.map(s => `
+        <div class="service-row">
+          <div>
+            <h3 style="font-size:1.05rem;">${s.name}</h3>
+            <p class="lede" style="font-size:0.88rem; margin-top:0.2rem;">${s.description || ''}</p>
+          </div>
+          <div style="text-align:right; white-space:nowrap;">
+            <strong style="color:var(--wine); font-family: var(--font-display);">${formatINR(s.price)}</strong>
+            <div style="font-size:0.78rem; color:var(--ink-soft);">${s.price_unit}</div>
+          </div>
+        </div>`).join('');
+      select.innerHTML = services.map(s => `<option value="${s.id}">${s.name} — ${formatINR(s.price)} (${s.price_unit})</option>`).join('');
+    } catch (e) {
+      list.innerHTML = '<p class="empty-note">Couldn\'t load services right now.</p>';
+    }
+  }
+
+  async function loadReviews() {
+    const list = document.getElementById('review-list');
+    try {
+      const reviews = await api.getVendorReviews(vendorId);
+      if (!reviews.length) {
+        list.innerHTML = '<p class="empty-note">No reviews yet — be the first to book and share your experience!</p>';
+        return;
+      }
+      list.innerHTML = reviews.map(r => `
+        <div class="review-item">
+          <div class="review-head">
+            <span class="stars">${renderStars(r.rating)}</span>
+            <span style="font-size:0.8rem; color:var(--ink-soft);">${formatDate(r.created_at.split('T')[0])}</span>
+          </div>
+          <p class="lede" style="margin-top:0.5rem;">${r.comment || ''}</p>
+        </div>`).join('');
+    } catch (e) {
+      list.innerHTML = '<p class="empty-note">Couldn\'t load reviews right now.</p>';
+    }
+  }
+
+  async function loadCalendar() {
+    const grid = document.getElementById('cal-grid');
+    const today = new Date();
+    const start = today.toISOString().split('T')[0];
+    const endDate = new Date(today); endDate.setDate(endDate.getDate() + 59);
+    const end = endDate.toISOString().split('T')[0];
+
+    let entries = [];
+    try {
+      entries = await api.getVendorAvailability(vendorId, start, end);
+    } catch (e) { /* render as unset if backend unreachable */ }
+    const byDate = {};
+    entries.forEach(e => { byDate[e.date] = e.status; });
+
+    let html = '';
+    for (let i = 0; i < 60; i++) {
+      const d = new Date(today); d.setDate(d.getDate() + i);
+      const iso = d.toISOString().split('T')[0];
+      const status = byDate[iso] || '';
+      html += `<div class="cal-day ${status}" title="${iso}">${d.getDate()}</div>`;
+    }
+    grid.innerHTML = html;
+  }
+
+  // ---- Booking modal open/close ----
+  const bookingModal = document.getElementById('booking-modal');
+  const confirmModal = document.getElementById('confirm-modal');
+
+  document.getElementById('open-booking-btn').addEventListener('click', () => {
+    if (!services.length) { showBanner('booking-status-note', ''); return; }
+    const user = getUser();
+    if (!user) {
+      window.location.href = `login.html?returnTo=${encodeURIComponent(window.location.pathname.split('/').pop() + window.location.search)}`;
+      return;
+    }
+    if (user.role !== 'customer') {
+      document.getElementById('booking-status-note').textContent = 'Only couples can request bookings. Log in with a customer account.';
+      return;
+    }
+    bookingModal.classList.add('open');
+  });
+  document.getElementById('modal-close').addEventListener('click', () => bookingModal.classList.remove('open'));
+  document.getElementById('confirm-close').addEventListener('click', () => confirmModal.classList.remove('open'));
+
+  const bookingForm = document.getElementById('booking-form');
+  const bookingSubmitBtn = document.getElementById('booking-submit-btn');
+
+  bookingForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearFieldError('b-date');
+    const service_id = document.getElementById('b-service').value;
+    const event_date = document.getElementById('b-date').value;
+    const guest_count = document.getElementById('b-guests').value || null;
+    const notes = document.getElementById('b-notes').value.trim() || null;
+
+    if (!event_date) { showFieldError('b-date', 'Please choose a date'); return; }
+
+    bookingSubmitBtn.disabled = true;
+    bookingSubmitBtn.textContent = 'Sending…';
+
+    try {
+      const booking = await api.createBooking({ vendor_id: vendorId, service_id, event_date, guest_count: guest_count ? Number(guest_count) : null, notes });
+      bookingModal.classList.remove('open');
+      bookingForm.reset();
+
+      const service = services.find(s => s.id === service_id);
+      const title = document.getElementById('confirm-title');
+      const body = document.getElementById('confirm-body');
+      const payBtn = document.getElementById('pay-btn');
+
+      if (booking.status === 'confirmed') {
+        title.textContent = 'Booking confirmed! 🎉';
+        body.textContent = `${vendor.business_name} instant-confirmed your date for ${formatDate(event_date)}.`;
+      } else {
+        title.textContent = 'Booking request sent!';
+        body.textContent = `${vendor.business_name} will confirm your date (${formatDate(event_date)}) shortly. You'll see the status update in "My Bookings".`;
+      }
+      payBtn.textContent = `Pay ${formatINR(service?.price)} to confirm`;
+      payBtn.onclick = async () => {
+        try {
+          await api.createPaymentOrder(booking.id, service?.price || 0);
+        } catch (err) {
+          showBanner('pay-banner', 'Online payments are coming soon — your booking stays reserved as pending, and our team will reach out to collect payment directly.', 'success');
+        }
+      };
+      confirmModal.classList.add('open');
+      loadCalendar();
+    } catch (err) {
+      showBanner('booking-banner', err.message || 'Could not create the booking. Please try a different date.');
+    } finally {
+      bookingSubmitBtn.disabled = false;
+      bookingSubmitBtn.textContent = 'Send booking request';
+    }
+  });
+
+  loadVendor();
+  loadServices();
+  loadReviews();
+  loadCalendar();
+</script>
+</body>
+</html>

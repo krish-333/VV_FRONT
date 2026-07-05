@@ -4,7 +4,7 @@
 // e.g. const API_BASE_URL = "https://vivahverse-backend.up.railway.app";
 // =========================================================================
 
-const API_BASE_URL = "http://localhost:8000"; // <-- swap this for your Railway URL
+const API_BASE_URL = "https://vvback-production.up.railway.app";
 
 const api = {
   async request(path, { method = 'GET', body = null, auth = false, isForm = false } = {}) {

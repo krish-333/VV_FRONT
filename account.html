@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account — Vivah Verse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@400;500;600;700&family=Parisienne&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/style.css">
+<style>
+  .dash-head { padding: var(--space-md) 0 var(--space-sm); }
+  .booking-card { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem; gap: 1rem; flex-wrap: wrap; }
+  .booking-info h3 { font-size: 1.05rem; }
+  .booking-info p { color: var(--ink-soft); font-size: 0.88rem; margin-top: 0.2rem; }
+  .booking-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .status-pill { font-size: 0.75rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: 100px; text-transform: capitalize; }
+  .status-pending { background: var(--gold-soft); color: var(--wine-deep); }
+  .status-confirmed { background: #E4F0E4; color: var(--success); }
+  .status-completed { background: var(--blush); color: var(--wine); }
+  .status-declined, .status-cancelled { background: #FBE7E5; color: var(--error); }
+  .filter-pills { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(58,42,46,0.5); display: none; align-items: center; justify-content: center; z-index: 200; padding: 1rem; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: var(--white); border-radius: var(--radius-lg); padding: clamp(1.5rem, 4vw, 2.5rem); max-width: 440px; width: 100%; box-shadow: var(--shadow-lift); }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="wrap">
+    <a href="index.html" class="nav-logo"><span class="flower">🌸</span> Vivah Verse</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="listings.html">Find Vendors</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions" id="nav-auth-slot"></div>
+    <button class="nav-toggle">☰</button>
+  </div>
+</nav>
+
+<section class="dash-head">
+  <div class="wrap">
+    <span class="eyebrow">Your Wedding, Organized</span>
+    <h1 style="margin-top:0.8rem; font-size: clamp(1.9rem, 3.5vw, 2.6rem);" id="welcome-heading">My Account</h1>
+    <p class="lede" style="margin-top:0.5rem;">Track every request, confirmation, and payment in one place.</p>
+  </div>
+</section>
+
+<section class="section-sm" style="padding-top:1.5rem;">
+  <div class="wrap">
+    <div class="filter-pills" id="status-pills">
+      <button class="pill active" data-status="">All</button>
+      <button class="pill" data-status="pending">Pending</button>
+      <button class="pill" data-status="confirmed">Confirmed</button>
+      <button class="pill" data-status="completed">Completed</button>
+      <button class="pill" data-status="declined">Declined</button>
+      <button class="pill" data-status="cancelled">Cancelled</button>
+    </div>
+
+    <div id="bookings-list" style="display:flex; flex-direction:column; gap:1rem;">
+      <p class="empty-note">Loading your bookings…</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">🌸 Vivah Verse</div>
+        <p style="opacity:0.75; font-size:0.9rem; max-width:32ch;">Stress-free weddings. One platform. One promise.</p>
+      </div>
+      <div><h4>Explore</h4><a href="listings.html">Find Vendors</a><a href="about.html">About Us</a><a href="contact.html">Contact</a></div>
+      <div><h4>For Vendors</h4><a href="signup.html?role=vendor">List Your Business</a><a href="login.html">Vendor Login</a></div>
+      <div><h4>Get in Touch</h4><a href="tel:8291945264">8291945264</a><a href="mailto:vivahverse9@gmail.com">vivahverse9@gmail.com</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Vivah Verse. All rights reserved.</span><span>Mumbai · Launching Mid 2026</span></div>
+  </div>
+</footer>
+
+<!-- Review modal -->
+<div class="modal-overlay" id="review-modal">
+  <div class="modal-box">
+    <span class="modal-close" style="float:right; cursor:pointer; color:var(--ink-soft);" id="review-close">✕</span>
+    <h3>Leave a review</h3>
+    <div class="form-banner" id="review-banner"></div>
+    <form id="review-form">
+      <input type="hidden" id="review-booking-id">
+      <div class="field">
+        <label for="review-rating">Rating</label>
+        <select id="review-rating" required>
+          <option value="5">★★★★★ — Excellent</option>
+          <option value="4">★★★★☆ — Great</option>
+          <option value="3">★★★☆☆ — Good</option>
+          <option value="2">★★☆☆☆ — Fair</option>
+          <option value="1">★☆☆☆☆ — Poor</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="review-comment">Comment (optional)</label>
+        <textarea id="review-comment" placeholder="How was your experience?"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Submit review</button>
+    </form>
+  </div>
+</div>
+
+<!-- Pay modal -->
+<div class="modal-overlay" id="pay-modal">
+  <div class="modal-box">
+    <span class="modal-close" style="float:right; cursor:pointer; color:var(--ink-soft);" id="pay-close">✕</span>
+    <h3>Confirm your booking</h3>
+    <p class="lede" style="margin-top:0.8rem;" id="pay-amount-line"></p>
+    <div class="form-banner" id="pay-banner"></div>
+    <button class="btn btn-gold btn-block" style="margin-top:1rem;" id="pay-confirm-btn">Pay now</button>
+  </div>
+</div>
+
+<script src="../shared/main.js"></script>
+<script src="../shared/api.js"></script>
+<script>
+  const user = requireAuth(['customer']);
+  if (user) {
+    document.getElementById('welcome-heading').textContent = `Hi ${user.full_name.split(' ')[0]}, here's your wedding at a glance`;
+  }
+
+  let allBookings = [];
+  const vendorCache = {};
+  const serviceCache = {};
+
+  async function enrichBooking(b) {
+    if (!vendorCache[b.vendor_id]) {
+      try { vendorCache[b.vendor_id] = await api.getVendor(b.vendor_id); } catch (e) { vendorCache[b.vendor_id] = { business_name: 'Vendor' }; }
+    }
+    if (!serviceCache[b.service_id]) {
+      try {
+        const services = await api.getVendorServices(b.vendor_id);
+        services.forEach(s => { serviceCache[s.id] = s; });
+      } catch (e) { /* ignore */ }
+    }
+    return { ...b, vendor: vendorCache[b.vendor_id], service: serviceCache[b.service_id] };
+  }
+
+  function bookingCard(b) {
+    const vendorName = b.vendor?.business_name || 'Vendor';
+    const serviceName = b.service?.name || 'Service';
+    const canPay = ['pending', 'confirmed'].includes(b.status);
+    const canReview = b.status === 'completed';
+    return `
+      <div class="card booking-card reveal visible">
+        <div class="booking-info">
+          <h3>${vendorName} <span class="status-pill status-${b.status}">${b.status}</span></h3>
+          <p>${serviceName} · ${formatDate(b.event_date)} ${b.guest_count ? '· ' + b.guest_count + ' guests' : ''}</p>
+          <p style="margin-top:0.4rem; color:var(--wine); font-weight:600;">${formatINR(b.total_amount)}${b.advance_amount ? ' · ' + formatINR(b.advance_amount) + ' paid' : ''}</p>
+        </div>
+        <div class="booking-actions">
+          <a href="vendor-detail.html?id=${b.vendor_id}" class="btn btn-outline btn-sm">View vendor</a>
+          ${canPay ? `<button class="btn btn-gold btn-sm" onclick="openPayModal('${b.id}', ${b.total_amount})">Pay</button>` : ''}
+          ${canReview ? `<button class="btn btn-primary btn-sm" onclick="openReviewModal('${b.id}')">Leave review</button>` : ''}
+        </div>
+      </div>`;
+  }
+
+  async function loadBookings() {
+    const list = document.getElementById('bookings-list');
+    try {
+      const bookings = await api.getMyBookings();
+      allBookings = await Promise.all(bookings.map(enrichBooking));
+      renderBookings('');
+    } catch (e) {
+      list.innerHTML = '<p class="empty-note">Couldn\'t load your bookings right now. Please refresh.</p>';
+    }
+  }
+
+  function renderBookings(statusFilter) {
+    const list = document.getElementById('bookings-list');
+    const filtered = statusFilter ? allBookings.filter(b => b.status === statusFilter) : allBookings;
+    if (!filtered.length) {
+      list.innerHTML = `<div class="empty-state"><div class="icon">🌸</div><h3>No bookings ${statusFilter ? 'in this status' : 'yet'}</h3><p class="lede center" style="margin-top:0.5rem;">Once you browse and request a vendor, it'll show up here.</p><a href="listings.html" class="btn btn-primary" style="margin-top:1rem;">Find vendors →</a></div>`;
+      return;
+    }
+    list.innerHTML = filtered.map(bookingCard).join('');
+  }
+
+  document.querySelectorAll('#status-pills .pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('#status-pills .pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      renderBookings(pill.dataset.status);
+    });
+  });
+
+  // ---- Review modal ----
+  const reviewModal = document.getElementById('review-modal');
+  function openReviewModal(bookingId) {
+    document.getElementById('review-booking-id').value = bookingId;
+    document.getElementById('review-banner').className = 'form-banner';
+    reviewModal.classList.add('open');
+  }
+  document.getElementById('review-close').addEventListener('click', () => reviewModal.classList.remove('open'));
+  document.getElementById('review-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const booking_id = document.getElementById('review-booking-id').value;
+    const rating = Number(document.getElementById('review-rating').value);
+    const comment = document.getElementById('review-comment').value.trim() || null;
+    try {
+      await api.createReview({ booking_id, rating, comment });
+      reviewModal.classList.remove('open');
+      showBanner('bookings-list', ''); // no-op guard
+      loadBookings();
+    } catch (err) {
+      showBanner('review-banner', err.message || 'Could not submit review.');
+    }
+  });
+
+  // ---- Pay modal (payments coming soon) ----
+  const payModal = document.getElementById('pay-modal');
+  let payBookingId = null;
+  function openPayModal(bookingId, amount) {
+    payBookingId = bookingId;
+    document.getElementById('pay-amount-line').textContent = `Amount due: ${formatINR(amount)}`;
+    document.getElementById('pay-banner').className = 'form-banner';
+    payModal.classList.add('open');
+  }
+  document.getElementById('pay-close').addEventListener('click', () => payModal.classList.remove('open'));
+  document.getElementById('pay-confirm-btn').addEventListener('click', async () => {
+    try {
+      const booking = allBookings.find(b => b.id === payBookingId);
+      await api.createPaymentOrder(payBookingId, booking?.total_amount || 0);
+    } catch (err) {
+      showBanner('pay-banner', 'Online payments are coming soon. Your booking stays reserved — our team will reach out to collect payment directly.', 'success');
+    }
+  });
+
+  loadBookings();
+</script>
+</body>
+</html>
